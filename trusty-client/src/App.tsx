@@ -1,8 +1,13 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
+
+import { AppStyled } from './styled';
+import Main from './components/Main';
 
 function App(): ReactElement {
   return (
-    <div>App</div>
+    <AppStyled>
+      <Main />
+    </AppStyled>
   );
 }
 
