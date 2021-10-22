@@ -1,9 +1,9 @@
 export interface IUser {
-  firstName: string,
-  lastName: string,
-  email: string,
-  phone: number,
-  avatarUrl: string,
+  firstName?: string,
+  lastName?: string,
+  email?: string,
+  phone?: number,
+  avatarUrl?: string,
 }
 
 export interface IState {

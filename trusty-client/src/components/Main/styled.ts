@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export const Input = styled(TextField)`
   display: block;
@@ -14,7 +14,7 @@ export const UserAvatar = styled(Avatar)`
   margin: 30px auto 0 auto;
 `;
 
-export const SubmitButton = styled(Button)`
-  display: block;
+export const SubmitButton = styled(LoadingButton)`
+  display: flex;
   margin: 30px auto 0 auto;
 `;

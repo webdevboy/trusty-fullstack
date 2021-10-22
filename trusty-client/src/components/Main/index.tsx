@@ -1,6 +1,8 @@
-import { ReactElement, ChangeEvent } from 'react';
+import { ReactElement, ChangeEvent, useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from '@mui/material/Typography';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 import { Input, UserAvatar, SubmitButton } from './styled';
 import {
@@ -8,6 +10,7 @@ import {
   getEmail,
   getFirstName,
   getLastName,
+  getLoading,
   getPhone,
 } from '../../store/user/selectors';
 import {
@@ -15,16 +18,22 @@ import {
   setLastNameAction,
   setEmailAction,
   setPhoneAction,
+  getUserAction,
+  updateUserAction,
 } from '../../store/user/actions';
+import { IUser } from '../../store/user/interfaces';
 
 function Main(): ReactElement {
   const dispatch = useDispatch();
+
+  const [updatedSuccess, setUpdatedSuccess] = useState(false);
 
   const firstName = useSelector(getFirstName);
   const lastName = useSelector(getLastName);
   const email = useSelector(getEmail);
   const phone = useSelector(getPhone);
   const avatarUrl = useSelector(getAvatarUrl);
+  const loading = useSelector(getLoading);
 
   const setFirstName = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setFirstNameAction(e.target.value));
@@ -41,6 +50,41 @@ function Main(): ReactElement {
   const setPhone = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setPhoneAction(+e.target.value));
   };
+
+  const closeSnackbar = (event: any, reason: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setUpdatedSuccess(false);
+  };
+
+  const fetchUser = useCallback(async () => {
+    await dispatch(getUserAction());
+  }, [dispatch]);
+
+  const updateUser = useCallback(async () => {
+    const updatedUser: IUser = {
+      firstName,
+      lastName,
+      email,
+      phone: phone || undefined,
+      avatarUrl,
+    };
+    await dispatch(updateUserAction(updatedUser));
+    setUpdatedSuccess(true);
+  }, [
+    dispatch,
+    firstName,
+    lastName,
+    email,
+    phone,
+    avatarUrl,
+  ]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return (
     <>
@@ -81,9 +125,18 @@ function Main(): ReactElement {
         onChange={setPhone}
         fullWidth
       />
-      <SubmitButton variant="contained" size="large">
+      <SubmitButton
+        onClick={updateUser}
+        loading={loading}
+        loadingPosition="center"
+        variant="contained"
+        size="large"
+      >
         Save
       </SubmitButton>
+      <Snackbar open={updatedSuccess} autoHideDuration={6000} onClose={closeSnackbar}>
+        <MuiAlert elevation={6} variant="filled">Profile Updated</MuiAlert>
+      </Snackbar>
     </>
   );
 }

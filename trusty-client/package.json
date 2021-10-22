@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mui/lab": "^5.0.0-alpha.51",
     "@mui/material": "^5.0.4",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "^5.0.3",
@@ -16,6 +17,7 @@
     "@types/redux-actions": "^2.6.2",
     "@types/redux-promise": "^0.5.29",
     "@types/styled-components": "^5.1.15",
+    "axios": "^0.23.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
@@ -72,6 +74,7 @@
     "node": "16.x"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/react-redux": "^7.1.20",
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0"
