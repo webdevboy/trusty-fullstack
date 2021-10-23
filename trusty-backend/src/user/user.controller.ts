@@ -20,12 +20,12 @@ export class UserController {
   @Post()
   updateUser(@Body('user') user: IUser): IUser {
     this.user = {
-      firstName: user.firstName || '',
-      lastName: user.lastName || '',
-      email: user.email || '',
-      phone: user.phone || '',
-      avatarUrl: user.avatarUrl || '',
+      firstName: user.firstName || this.user.firstName,
+      lastName: user.lastName || this.user.lastName,
+      email: user.email || this.user.email,
+      phone: user.phone || this.user.phone,
+      avatarUrl: user.avatarUrl || this.user.avatarUrl,
     };
-    return user;
+    return this.user;
   }
 }

@@ -101,6 +101,7 @@ function Main(): ReactElement {
         variant="outlined"
         value={firstName}
         onChange={setFirstName}
+        data-cy-id="firstname-input"
         fullWidth
       />
       <Input
@@ -108,6 +109,7 @@ function Main(): ReactElement {
         variant="outlined"
         value={lastName}
         onChange={setLastName}
+        data-cy-id="lastname-input"
         fullWidth
       />
       <Input
@@ -115,6 +117,7 @@ function Main(): ReactElement {
         variant="outlined"
         value={email}
         onChange={setEmail}
+        data-cy-id="email-input"
         fullWidth
       />
       <Input
@@ -123,6 +126,7 @@ function Main(): ReactElement {
         type="number"
         value={phone || ''}
         onChange={setPhone}
+        data-cy-id="phone-input"
         fullWidth
       />
       <SubmitButton
@@ -131,11 +135,12 @@ function Main(): ReactElement {
         loadingPosition="center"
         variant="contained"
         size="large"
+        data-cy-id="sumbit-btn"
       >
         Save
       </SubmitButton>
       <Snackbar open={updatedSuccess} autoHideDuration={6000} onClose={closeSnackbar}>
-        <MuiAlert elevation={6} variant="filled">Profile Updated</MuiAlert>
+        <MuiAlert data-cy-id="success-updated" elevation={6} variant="filled">Profile Updated</MuiAlert>
       </Snackbar>
     </>
   );
