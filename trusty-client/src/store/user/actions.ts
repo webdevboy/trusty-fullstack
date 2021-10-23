@@ -73,21 +73,27 @@ export const getUserAction = () => async (dispatch: Dispatch<UserAction>) => {
     phone: state.user.phone || undefined,
   };
   dispatch(setLoadingAction(true));
-  const res: AxiosResponse = await getUser();
-  const remoteUser: IUser = res.data as IUser;
-  let isRemoteUpToDate = true;
-  if (
-    user.avatarUrl !== remoteUser.avatarUrl ||
-    user.email !== remoteUser.email ||
-    user.firstName !== remoteUser.firstName ||
-    user.lastName !== remoteUser.lastName ||
-    user.phone !== remoteUser.phone
-  ) {
-    isRemoteUpToDate = false;
+  try {
+    const res: AxiosResponse = await getUser();
+    const remoteUser: IUser = res.data as IUser;
+    let isRemoteUpToDate = true;
+    if (
+      user.avatarUrl !== remoteUser.avatarUrl ||
+      user.email !== remoteUser.email ||
+      user.firstName !== remoteUser.firstName ||
+      user.lastName !== remoteUser.lastName ||
+      user.phone !== remoteUser.phone
+    ) {
+      isRemoteUpToDate = false;
+    }
+    if (!isRemoteUpToDate) {
+      await updateUserAction(user)(dispatch);
+    }
+    dispatch(setLoadingAction(false));
+    dispatch(setUserAction(res.data as IUser));
   }
-  if (!isRemoteUpToDate) {
-    await updateUserAction(user)(dispatch);
+  catch (error) {
+    console.log(error);
+    dispatch(setLoadingAction(false));
   }
-  dispatch(setLoadingAction(false));
-  dispatch(setUserAction(res.data as IUser));
 };
