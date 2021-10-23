@@ -70,6 +70,7 @@ function Main(): ReactElement {
       email,
       phone: phone || undefined,
       avatarUrl,
+      updatedAt: new Date(),
     };
     await dispatch(updateUserAction(updatedUser));
     setUpdatedSuccess(true);

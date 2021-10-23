@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Dispatch } from 'redux';
+import moment from 'moment';
 
 import { store } from '..';
 import { getUser, postUser } from '../../api';
@@ -71,11 +72,17 @@ export const getUserAction = () => async (dispatch: Dispatch<UserAction>) => {
     firstName: state.user.firstName,
     lastName: state.user.lastName,
     phone: state.user.phone || undefined,
+    updatedAt: state.user.updatedAt,
   };
+  console.log(user);
   dispatch(setLoadingAction(true));
   try {
     const res: AxiosResponse = await getUser();
     const remoteUser: IUser = res.data as IUser;
+    const userArr = [user, remoteUser].sort((a, b) => {
+      return moment(a.updatedAt).diff(moment(b.updatedAt));
+    }).reverse();
+    const latestUser = userArr[0];
     let isRemoteUpToDate = true;
     if (
       user.avatarUrl !== remoteUser.avatarUrl ||
@@ -87,10 +94,13 @@ export const getUserAction = () => async (dispatch: Dispatch<UserAction>) => {
       isRemoteUpToDate = false;
     }
     if (!isRemoteUpToDate) {
-      await updateUserAction(user)(dispatch);
+      await updateUserAction(latestUser)(dispatch);
+      dispatch(setUserAction(latestUser));
+    }
+    else {
+      dispatch(setUserAction(res.data as IUser));
     }
     dispatch(setLoadingAction(false));
-    dispatch(setUserAction(res.data as IUser));
   }
   catch (error) {
     console.log(error);

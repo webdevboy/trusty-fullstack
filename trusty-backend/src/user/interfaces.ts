@@ -4,4 +4,5 @@ export interface IUser {
   email: string;
   phone: string;
   avatarUrl: string;
+  updatedAt: Date;
 }

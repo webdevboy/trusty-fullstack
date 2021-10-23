@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { IUser } from './interfaces';
 
 @Controller('api/user')
@@ -10,6 +10,7 @@ export class UserController {
     email: 'test@test.com',
     phone: '123456789',
     avatarUrl: 'https://i.pravatar.cc/300',
+    updatedAt: new Date(),
   };
 
   @Get()
@@ -25,6 +26,7 @@ export class UserController {
       email: user.email || this.user.email,
       phone: user.phone || this.user.phone,
       avatarUrl: user.avatarUrl || this.user.avatarUrl,
+      updatedAt: user.updatedAt || this.user.updatedAt,
     };
     return this.user;
   }

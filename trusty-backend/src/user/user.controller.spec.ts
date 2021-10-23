@@ -28,6 +28,7 @@ describe('UserController', () => {
         email: 'test@test.com',
         phone: '123456789',
         avatarUrl: 'https://i.pravatar.cc/300',
+        updatedAt: new Date(),
       };
       const upadtedUser = controller.updateUser(user);
       expect(upadtedUser.firstName).toBe(user.firstName);

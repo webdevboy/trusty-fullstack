@@ -4,6 +4,7 @@ export interface IUser {
   email?: string,
   phone?: number,
   avatarUrl?: string,
+  updatedAt?: Date,
 }
 
 export interface IState {
@@ -13,4 +14,5 @@ export interface IState {
   phone: number | null,
   avatarUrl: string,
   loading: boolean,
+  updatedAt: Date,
 }
