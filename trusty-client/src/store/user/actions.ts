@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import { Dispatch } from 'redux';
-import { equals } from 'ramda';
 
 import { store } from '..';
 import { getUser, postUser } from '../../api';
@@ -75,8 +74,17 @@ export const getUserAction = () => async (dispatch: Dispatch<UserAction>) => {
   };
   dispatch(setLoadingAction(true));
   const res: AxiosResponse = await getUser();
-  const isRemoteUpToDate = equals(user, res.data);
-  console.log(isRemoteUpToDate);
+  const remoteUser: IUser = res.data as IUser;
+  let isRemoteUpToDate = true;
+  if (
+    user.avatarUrl !== remoteUser.avatarUrl ||
+    user.email !== remoteUser.email ||
+    user.firstName !== remoteUser.firstName ||
+    user.lastName !== remoteUser.lastName ||
+    user.phone !== remoteUser.phone
+  ) {
+    isRemoteUpToDate = false;
+  }
   if (!isRemoteUpToDate) {
     await updateUserAction(user)(dispatch);
   }
