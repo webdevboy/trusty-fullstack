@@ -1,6 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { Dispatch } from 'redux';
+import { equals } from 'ramda';
 
+import { store } from '..';
 import { getUser, postUser } from '../../api';
 import {
   SetAvatarUrlActionType,
@@ -50,13 +52,6 @@ export const setLoadingAction = (value: boolean): SetLoadingActionType => ({
   payload: value,
 });
 
-export const getUserAction = () => async (dispatch: Dispatch<UserAction>) => {
-  dispatch(setLoadingAction(true));
-  const res: AxiosResponse = await getUser();
-  dispatch(setLoadingAction(false));
-  dispatch(setUserAction(res.data as IUser));
-};
-
 export const updateUserAction = (user: IUser) => async (dispatch: Dispatch<UserAction>) => {
   dispatch(setLoadingAction(true));
   try {
@@ -67,4 +62,24 @@ export const updateUserAction = (user: IUser) => async (dispatch: Dispatch<UserA
     console.log(error);
     dispatch(setLoadingAction(false));
   }
+};
+
+export const getUserAction = () => async (dispatch: Dispatch<UserAction>) => {
+  const state = store.getState();
+  const user: IUser = {
+    avatarUrl: state.user.avatarUrl,
+    email: state.user.email,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
+    phone: state.user.phone || undefined,
+  };
+  dispatch(setLoadingAction(true));
+  const res: AxiosResponse = await getUser();
+  const isRemoteUpToDate = equals(user, res.data);
+  console.log(isRemoteUpToDate);
+  if (!isRemoteUpToDate) {
+    await updateUserAction(user)(dispatch);
+  }
+  dispatch(setLoadingAction(false));
+  dispatch(setUserAction(res.data as IUser));
 };
